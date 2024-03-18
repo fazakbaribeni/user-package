@@ -1,0 +1,22 @@
+{
+    "name": "fazakbaribeni/user-api-package",
+    "description": "A service for retrieving and creating users from  https://reqres.in/",
+    "require": {
+        "guzzlehttp/guzzle": "*"
+    },
+    "require-dev": {
+        "php": "8.2"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Fazakbaribeni\\UserApiPackage\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Faz Akbari-beni"
+        }
+    ],
+    "minimum-stability": "dev"
+}
