@@ -12,6 +12,13 @@
 
 
 
+### Tests
+
+For the testing section I've added a composer package called PEST which is built on top of PHPUnit.
+
+When Running it you will need to visit https://pestphp.com/docs/installation for executing it via the command line.
+
+I've personally used GitBash to execute the tests. 
 
 
 

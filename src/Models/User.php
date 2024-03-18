@@ -6,9 +6,9 @@ namespace  Fazakbaribeni\UserApiPackage\Models;
 
 class User implements \JsonSerializable
 {
-    private $id;
-    private $name;
-    private $job;
+    public $id;
+    public $name;
+    public $job;
 
     /**
      * A constructor for initializing the id, name, and job properties.

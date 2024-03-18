@@ -14,7 +14,7 @@ use GuzzleHttp\Exception\RequestException;
 
 class UserService implements UserRepositoryInterface
 {
-    protected $client;
+    public $client;
 
     /**
      * Create a new HTTP Request instance to pass to the other method calls
@@ -44,7 +44,7 @@ class UserService implements UserRepositoryInterface
 
             $data = json_decode($response->getBody()->getContents(), true)['data'];
 
-            return new User($data['id'], $data['first_name'], $data['last_name']);
+            return new User($data['id'], $data['name'], $data['job']);
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
             // Wrap the Guzzle exception in a domain-specific exception.
             throw new UserApiException("Failed to retrieve user: " . $e->getMessage(), 0, $e);
@@ -75,7 +75,7 @@ class UserService implements UserRepositoryInterface
             $users = [];
 
             foreach ($data as $userData) {
-                $users[] = new User($userData['id'], $userData['first_name'], '');
+                $users[] = new User($userData['id'], $userData['name'], '');
             }
             return $users;
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
