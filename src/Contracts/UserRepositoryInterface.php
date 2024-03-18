@@ -12,7 +12,7 @@ interface UserRepositoryInterface
      * @param int $id The ID of the user to find
      * @return User|null The found user, or null if not found
      */
-    public function find($id): ?User;
+    public function findByID($id): ?User;
 
     /**
      * Get all users from the API
