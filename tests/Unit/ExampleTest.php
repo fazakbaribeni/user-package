@@ -15,8 +15,17 @@ use Fazakbaribeni\UserApiPackage\Exceptions\UserApiException;
  * Test for finding a user by ID successfully
  */
 test('finds a user by ID successfully', function () {
+
     $mock = new MockHandler([
-        new Response(200, [], json_encode(['data' => ['id' => 1, 'name' => 'Farhad Akbari-Beni', 'job' => 'Fisherman']])),
+        new Response(200, [], json_encode(
+            ['data' =>
+                [
+                    'id' => 1,
+                    'first_name' => 'Janet',
+                    'last_name' => 'Weaver'
+                ]
+            ])
+        ),
     ]);
 
     $handlerStack = HandlerStack::create($mock);
@@ -29,7 +38,7 @@ test('finds a user by ID successfully', function () {
 
     expect($user)->toBeInstanceOf(User::class)
         ->id->toEqual(1)
-        ->name->toEqual('Farhad Akbari-Beni');
+        ->name->toEqual('Janet Weaver');
 });
 
 
@@ -58,8 +67,8 @@ test('throws an exception if user is not found', function () {
 test('finds all users successfully', function () {
     $mockResponseData = [
         'data' => [
-            ['id' => 1, 'name' => 'John', 'job' => 'Doe'],
-            ['id' => 2, 'name' => 'Jane', 'job' => 'Doe']
+            ['id' => 1, 'first_name' => 'John', 'last_name' => 'Doe'],
+            ['id' => 2, 'first_name' => 'Jane', 'last_name' => 'Doe']
         ]
     ];
 

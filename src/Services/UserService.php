@@ -10,11 +10,12 @@ use Fazakbaribeni\UserApiPackage\Exceptions\UserApiException;
 use Fazakbaribeni\UserApiPackage\Exceptions\UserNotFoundException;
 use Fazakbaribeni\UserApiPackage\Exceptions\PageNotFoundException;
 use GuzzleHttp\Exception\RequestException;
+use function PHPUnit\Framework\exactly;
 
 
 class UserService implements UserRepositoryInterface
 {
-    public $client;
+    protected $client;
 
     /**
      * Create a new HTTP Request instance to pass to the other method calls
@@ -44,7 +45,8 @@ class UserService implements UserRepositoryInterface
 
             $data = json_decode($response->getBody()->getContents(), true)['data'];
 
-            return new User($data['id'], $data['name'], $data['job']);
+            return new User($data['id'], $data['first_name'] ?? '', $data['last_name'] ?? '',  $data['job']?? '');
+
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
             // Wrap the Guzzle exception in a domain-specific exception.
             throw new UserApiException("Failed to retrieve user: " . $e->getMessage(), 0, $e);
@@ -62,7 +64,6 @@ class UserService implements UserRepositoryInterface
 
         try {
 
-
             $response = $this->client->request('GET', "users?page={$page}");
 
             // Check if the page was found otherwise throw an exception.
@@ -70,14 +71,15 @@ class UserService implements UserRepositoryInterface
                 throw new PageNotFoundException("Page {$page}  not found.");
             }
 
-
             $data = json_decode($response->getBody()->getContents(), true)['data'];
             $users = [];
 
             foreach ($data as $userData) {
-                $users[] = new User($userData['id'], $userData['name'], '');
+                $users[] = new User($userData['id'], $userData['first_name'], $userData['last_name'], '');
             }
+
             return $users;
+
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
             // Wrap the Guzzle exception in a domain-specific exception.
             throw new UserApiException("Failed to retrieve users by that page ID : " . $e->getMessage(), 0, $e);
@@ -94,25 +96,32 @@ class UserService implements UserRepositoryInterface
      */
     public function create($name, $job): User
     {
-
         try {
-
+            // Check if the name or job is empty
             if ($name == '' || $job == '') {
                 throw new UserNotFoundException('User or the name and job could not be empty.');
             }
-            
+
+            // Make the POST request to create a new user
             $response = $this->client->request('POST', 'users', [
                 'json' => ['name' => $name, 'job' => $job]
             ]);
-            
 
+            // Decode the response body
             $data = json_decode($response->getBody()->getContents(), true);
 
+            // Check if the response includes an id, indicating user creation was successful
             if (!isset($data['id'])) {
                 throw new UserNotFoundException('User could not be created.');
             }
 
-            return new User($data['id'], $name, $job);
+            // Assuming the API returns the full name in the 'name' field, split it for the User model
+            $nameArray = explode(" ", $name, 2); // Split the name into at most 2 parts
+            $firstName = $nameArray[0];
+            $lastName = $nameArray[1] ?? ''; // Default to empty string if no last name
+
+            // Create and return the new User instance
+            return new User($data['id'], $firstName, $lastName, $job);
 
         } catch (RequestException $e) {
             // Rethrow the Guzzle exception as your own domain-specific exception
@@ -121,6 +130,5 @@ class UserService implements UserRepositoryInterface
             // Catch any other generic exceptions
             throw new UserApiException('An unexpected error occurred: ' . $e->getMessage(), 0, $e);
         }
-
     }
 }

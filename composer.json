@@ -13,8 +13,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Fazakbaribeni\\UserApiPackage\\": "src/",
-
+            "Fazakbaribeni\\UserApiPackage\\": "src/"
         }
     },
     "authors": [
