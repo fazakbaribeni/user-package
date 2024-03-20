@@ -26,12 +26,7 @@ class UserDTO implements \JsonSerializable
         private string $last_name,
         private string $job
     )
-    {
-        $this->id = $id;
-        $this->first_name = $first_name;
-        $this->last_name = $last_name;
-        $this->job = $job;
-    }
+    {}
 
 
     /**
