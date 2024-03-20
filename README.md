@@ -28,4 +28,4 @@ I've personally used GitBash to execute the tests.
 
 ### Summary 
 
-The User class in src/Models/User.php serves as a Data Transfer Object (DTO) as it encapsulates the user data fields like ID, name, and job, and provides methods to serialize the object to JSON and convert it to an array.
+The User class in src/DTOs/UserDTO.php serves as a Data Transfer Object (DTO) as it encapsulates the user data fields like ID, name, and job, and provides methods to serialize the object to JSON and convert it to an array.
