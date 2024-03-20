@@ -1,18 +1,18 @@
 <?php
 namespace Fazakbaribeni\UserApiPackage\Contracts;
 
-use Fazakbaribeni\UserApiPackage\Models\User;
+use Fazakbaribeni\UserApiPackage\DTOs\UserDTO;
 
-interface UserRepositoryInterface
+interface UserServiceInterface
 {
 
     /**
      * Find a user by their ID.
      *
      * @param int $id The ID of the user to find
-     * @return User|null The found user, or null if not found
+     * @return UserDTO|null The found user, or null if not found
      */
-    public function findByID($id): ?User;
+    public function findByID($id): ?UserDTO;
 
     /**
      * Get all users from the API
@@ -27,8 +27,8 @@ interface UserRepositoryInterface
      *
      * @param mixed $name The name of the user.
      * @param mixed $job The job of the user.
-     * @return User The newly created user.
+     * @return UserDTO The newly created user.
      */
 
-    public function create($name, $job): User;
+    public function create($name, $job): UserDTO;
 }

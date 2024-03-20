@@ -1,19 +1,18 @@
 <?php
 
-namespace Fazakbaribeni\UserApiPackage\Services;
 
+namespace Fazakbaribeni\UserApiPackage;
 
-use Fazakbaribeni\UserApiPackage\Contracts\UserRepositoryInterface;
-use Fazakbaribeni\UserApiPackage\Models\User;
-use GuzzleHttp\Client;
+use Fazakbaribeni\UserApiPackage\Contracts\UserServiceInterface;
+use Fazakbaribeni\UserApiPackage\DTOs\UserDTO;
+use Fazakbaribeni\UserApiPackage\Exceptions\PageNotFoundException;
 use Fazakbaribeni\UserApiPackage\Exceptions\UserApiException;
 use Fazakbaribeni\UserApiPackage\Exceptions\UserNotFoundException;
-use Fazakbaribeni\UserApiPackage\Exceptions\PageNotFoundException;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use function PHPUnit\Framework\exactly;
 
 
-class UserService implements UserRepositoryInterface
+class UserService implements UserServiceInterface
 {
     protected $client;
 
@@ -30,9 +29,9 @@ class UserService implements UserRepositoryInterface
      * Find a user by their ID.
      *
      * @param int $id The ID of the user to find.
-     * @return User|null
+     * @return UserDTO|null
      */
-    public function findByID($id): ?User
+    public function findByID($id): ?UserDTO
     {
         try {
             $response = $this->client->request('GET', "users/{$id}");
@@ -45,7 +44,7 @@ class UserService implements UserRepositoryInterface
 
             $data = json_decode($response->getBody()->getContents(), true)['data'];
 
-            return new User($data['id'], $data['first_name'] ?? '', $data['last_name'] ?? '',  $data['job']?? '');
+            return new UserDTO($data['id'], $data['first_name'] ?? '', $data['last_name'] ?? '', $data['job'] ?? '');
 
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
             // Wrap the Guzzle exception in a domain-specific exception.
@@ -75,7 +74,7 @@ class UserService implements UserRepositoryInterface
             $users = [];
 
             foreach ($data as $userData) {
-                $users[] = new User($userData['id'], $userData['first_name'], $userData['last_name'], '');
+                $users[] = new UserDTO($userData['id'], $userData['first_name'], $userData['last_name'], '');
             }
 
             return $users;
@@ -92,9 +91,9 @@ class UserService implements UserRepositoryInterface
      *
      * @param mixed $name The name of the user.
      * @param mixed $job The job of the user.
-     * @return User The newly created User object.
+     * @return UserDTO The newly created User object.
      */
-    public function create($name, $job): User
+    public function create($name, $job): UserDTO
     {
         try {
             // Check if the name or job is empty
@@ -121,7 +120,7 @@ class UserService implements UserRepositoryInterface
             $lastName = $nameArray[1] ?? ''; // Default to empty string if no last name
 
             // Create and return the new User instance
-            return new User($data['id'], $firstName, $lastName, $job);
+            return new UserDTO($data['id'], $firstName, $lastName, $job);
 
         } catch (RequestException $e) {
             // Rethrow the Guzzle exception as your own domain-specific exception

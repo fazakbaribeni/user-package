@@ -1,14 +1,12 @@
 <?php
 
+use Fazakbaribeni\UserApiPackage\DTOs\UserDTO;
+use Fazakbaribeni\UserApiPackage\Exceptions\PageNotFoundException;
+use Fazakbaribeni\UserApiPackage\Exceptions\UserNotFoundException;
+use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Client;
-use Fazakbaribeni\UserApiPackage\Services\UserService;
-use Fazakbaribeni\UserApiPackage\Models\User;
-use Fazakbaribeni\UserApiPackage\Exceptions\UserNotFoundException;
-use Fazakbaribeni\UserApiPackage\Exceptions\PageNotFoundException;
-use Fazakbaribeni\UserApiPackage\Exceptions\UserApiException;
 
 
 /***
@@ -36,7 +34,7 @@ test('finds a user by ID successfully', function () {
 
     $user = $userService->findByID(1);
 
-    expect($user)->toBeInstanceOf(User::class)
+    expect($user)->toBeInstanceOf(UserDTO::class)
         ->id->toEqual(1)
         ->name->toEqual('Janet Weaver');
 });
@@ -85,7 +83,7 @@ test('finds all users successfully', function () {
     $users = $userService->findAll(1);
 
     expect($users)->toBeArray()->toHaveCount(2);
-    expect($users[0])->toBeInstanceOf(User::class)
+    expect($users[0])->toBeInstanceOf(UserDTO::class)
         ->id->toEqual(1);
 });
 
@@ -135,7 +133,7 @@ test('creates a user successfully', function () {
 
     $user = $userService->create('New User', 'Developer');
 
-    expect($user)->toBeInstanceOf(User::class)
+    expect($user)->toBeInstanceOf(UserDTO::class)
         ->id->toEqual(123);
 });
 

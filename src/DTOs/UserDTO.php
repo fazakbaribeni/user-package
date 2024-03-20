@@ -1,19 +1,16 @@
 <?php
 
 
-namespace Fazakbaribeni\UserApiPackage\Models;
+namespace Fazakbaribeni\UserApiPackage\DTOs;
 
 
 /***
  * This User Class is used as a DTO
  * It encapsulates data and provides methods to serialize the object to JSON or convert it to an array
  */
-class User implements \JsonSerializable
+class UserDTO implements \JsonSerializable
 {
-    protected $id;
-    protected $first_name;
-    protected $last_name;
-    protected $job;
+
 
     /**
      * A constructor for initializing the id, name, and job properties.
@@ -23,7 +20,12 @@ class User implements \JsonSerializable
      * @param string $last_name
      * @param string $job
      */
-    public function __construct($id, $first_name, $last_name, $job)
+    public function __construct(
+        private int $id,
+        private string $first_name,
+        private string $last_name,
+        private string $job
+    )
     {
         $this->id = $id;
         $this->first_name = $first_name;
